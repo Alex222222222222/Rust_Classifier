@@ -114,7 +114,7 @@ impl Classifier {
 
     /// Takes an unlabeled document that has been tokenized into a vector of strings
     /// and then computes a classifying label for the document
-    pub fn classify_tokenized(&self, document: &[String]) -> String {
+    pub fn classify_tokenized(&self, document: &[String]) -> Result<String, crate::Error> {
         let mut max_score = f64::NEG_INFINITY;
         let mut max_classification = None;
 
@@ -126,15 +126,15 @@ impl Classifier {
             }
         }
 
-        max_classification
-            .expect("no classification found")
-            .label
-            .clone()
+        match max_classification {
+            Some(c) => Ok(c.label.clone()),
+            None => Err(crate::Error::NoClassifications),
+        }
     }
 
     /// Takes an unlabeled document and tokenizes it by breaking on spaces and
     /// then computes a classifying label for the document
-    pub fn classify(&self, document: &str) -> String {
+    pub fn classify(&self, document: &str) -> Result<String, crate::Error> {
         self.classify_tokenized(&split_document(document))
     }
 

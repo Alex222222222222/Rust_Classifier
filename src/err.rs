@@ -4,6 +4,7 @@ use std::fmt;
 pub enum Error{
     EncodeJsonError(String),
     ParseJsonError(String),
+    NoClassifications,
 }
 
 impl Error{
@@ -11,6 +12,7 @@ impl Error{
         match *self{
             Error::ParseJsonError(ref err) => err,
             Error::EncodeJsonError(ref err) => err,
+            Error::NoClassifications => "No classifications found",
         }
     }
 }

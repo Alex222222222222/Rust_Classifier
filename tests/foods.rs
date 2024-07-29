@@ -30,11 +30,11 @@ fn food_document_test() {
     // now try to classify a new sentence with the classifier
     let food_sentence = "salami pancetta beef ribs".to_string();
 
-    assert_eq!(nb.classify(&food_sentence), "meat");
+    assert_eq!(nb.classify(&food_sentence).unwrap(), "meat");
 
     // export and reimport the classifier just to try it
     let nb2 = NaiveBayes::from_json(&nb.to_json().unwrap()).unwrap();
-    assert_eq!(nb2.classify(&food_sentence), "meat");
+    assert_eq!(nb2.classify(&food_sentence).unwrap(), "meat");
 
     // try getting all probabilities for the sentence
     let all_probs = nb.get_document_probabilities(&food_sentence);
@@ -80,7 +80,7 @@ fn food_document_tokenized_test() {
         .map(|s| s.to_string())
         .collect();
 
-    assert_eq!(nb.classify_tokenized(&food_sentence), "meat");
+    assert_eq!(nb.classify_tokenized(&food_sentence).unwrap(), "meat");
 
     // try getting all probabilities for the sentence
     let all_probs = nb.get_document_probabilities_tokenized(&food_sentence);
@@ -118,7 +118,7 @@ fn food_documents_test() {
     // now try to classify a new sentence with the classifier
     let food_sentence = "salami pancetta beef ribs".to_string();
 
-    assert_eq!(nb.classify(&food_sentence), "meat");
+    assert_eq!(nb.classify(&food_sentence).unwrap(), "meat");
 
     // try getting all probabilities for the sentence
     let all_probs = nb.get_document_probabilities(&food_sentence);
@@ -197,7 +197,7 @@ fn food_smoothing_test() {
     // now try to classify a new sentence with the classifier
     let food_sentence = "salami pancetta beef ribs".to_string();
 
-    assert_eq!(nb.classify(&food_sentence), "meat");
+    assert_eq!(nb.classify(&food_sentence).unwrap(), "meat");
 
     // try getting all probabilities for the sentence
     let all_probs = nb.get_document_probabilities(&food_sentence);
