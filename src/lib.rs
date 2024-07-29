@@ -36,9 +36,7 @@
 //! assert_eq!( nb.classify(&food_document), "meat" );
 //! ```
 //! meat examples from [baconipsum](http://baconipsum.com/), veggie examples from: [veggieipsum](http://veggieipsum.com/)
-
-extern crate rustc_serialize;
-extern crate regex;
-
 mod naive_bayes;
+mod err;
 pub use self::naive_bayes::Classifier as NaiveBayes;
+pub use self::err::Error;

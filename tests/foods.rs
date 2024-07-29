@@ -3,7 +3,6 @@ use classifier::NaiveBayes;
 
 #[test]
 fn food_document_test() {
-    
     // create a new classifier
     let mut nb = NaiveBayes::new();
 
@@ -31,11 +30,11 @@ fn food_document_test() {
     // now try to classify a new sentence with the classifier
     let food_sentence = "salami pancetta beef ribs".to_string();
 
-    assert_eq!( nb.classify(&food_sentence), "meat" );
+    assert_eq!(nb.classify(&food_sentence), "meat");
 
     // export and reimport the classifier just to try it
-    let nb2 = NaiveBayes::from_json( &nb.to_json() );
-    assert_eq!( nb2.classify(&food_sentence), "meat" );
+    let nb2 = NaiveBayes::from_json(&nb.to_json().unwrap()).unwrap();
+    assert_eq!(nb2.classify(&food_sentence), "meat");
 
     // try getting all probabilities for the sentence
     let all_probs = nb.get_document_probabilities(&food_sentence);
@@ -46,18 +45,16 @@ fn food_document_test() {
         assert_eq!(all_probs[1].0, "meat");
         assert!(all_probs[0].1 < all_probs[1].1);
     }
-
 }
 
 // test out methods that train from tokenized documents
 #[test]
 fn food_document_tokenized_test() {
-    
     // create a new classifier
     let mut nb = NaiveBayes::new();
 
     // some example documents and labels
-    let examples = [
+    let examples: [(Vec<String>, &str); 4] = [
 
         ("beetroot water spinach okra water chestnut ricebean pea catsear courgette summer purslane. water spinach arugula pea tatsoi aubergine spring onion bush tomato kale radicchio turnip chicory salsify pea sprouts fava bean. dandelion zucchini burdock yarrow chickpea dandelion sorrel courgette turnip greens tigernut soybean radish artichoke wattle seed endive groundnut broccoli arugula.".split(" ").map(|s| s.to_string()).collect(), "veggie"),
 
@@ -78,9 +75,12 @@ fn food_document_tokenized_test() {
     nb.train();
 
     // now try to classify a new sentence with the classifier
-    let food_sentence = "salami pancetta beef ribs".split(" ").map(|s| s.to_string()).collect();
+    let food_sentence: Vec<String> = "salami pancetta beef ribs"
+        .split(" ")
+        .map(|s| s.to_string())
+        .collect();
 
-    assert_eq!( nb.classify_tokenized(&food_sentence), "meat" );
+    assert_eq!(nb.classify_tokenized(&food_sentence), "meat");
 
     // try getting all probabilities for the sentence
     let all_probs = nb.get_document_probabilities_tokenized(&food_sentence);
@@ -91,12 +91,10 @@ fn food_document_tokenized_test() {
         assert_eq!(all_probs[1].0, "meat");
         assert!(all_probs[0].1 < all_probs[1].1);
     }
-
 }
 
 #[test]
 fn food_documents_test() {
-    
     // create a new classifier
     let mut nb = NaiveBayes::new();
 
@@ -120,7 +118,7 @@ fn food_documents_test() {
     // now try to classify a new sentence with the classifier
     let food_sentence = "salami pancetta beef ribs".to_string();
 
-    assert_eq!( nb.classify(&food_sentence), "meat" );
+    assert_eq!(nb.classify(&food_sentence), "meat");
 
     // try getting all probabilities for the sentence
     let all_probs = nb.get_document_probabilities(&food_sentence);
@@ -131,13 +129,10 @@ fn food_documents_test() {
         assert_eq!(all_probs[1].0, "meat");
         assert!(all_probs[0].1 < all_probs[1].1);
     }
-
 }
-
 
 #[test]
 fn get_labels_test() {
-
     // create a new classifier
     let mut nb = NaiveBayes::new();
 
@@ -165,14 +160,13 @@ fn get_labels_test() {
     // test after adding documents
     let labels = nb.get_labels();
     assert!(
-        (labels[0] == "meat" && labels[1] == "veggie") ||
-        (labels[0] == "veggie" && labels[1] == "meat") );
-
+        (labels[0] == "meat" && labels[1] == "veggie")
+            || (labels[0] == "veggie" && labels[1] == "meat")
+    );
 }
 
 #[test]
 fn food_smoothing_test() {
-    
     // create a new classifier
     let mut nb = NaiveBayes::new();
 
@@ -203,7 +197,7 @@ fn food_smoothing_test() {
     // now try to classify a new sentence with the classifier
     let food_sentence = "salami pancetta beef ribs".to_string();
 
-    assert_eq!( nb.classify(&food_sentence), "meat" );
+    assert_eq!(nb.classify(&food_sentence), "meat");
 
     // try getting all probabilities for the sentence
     let all_probs = nb.get_document_probabilities(&food_sentence);
@@ -214,6 +208,4 @@ fn food_smoothing_test() {
         assert_eq!(all_probs[1].0, "meat");
         assert!(all_probs[0].1 < all_probs[1].1);
     }
-
 }
-
